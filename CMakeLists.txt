@@ -10,10 +10,13 @@ add_executable(cam_project_2
         web_sockets/lib_my_event_handler/event_ws.cpp web_sockets/lib_my_event_handler/event_ws.h
         web_sockets/lib_my_event_handler/handler_ws.h
         web_sockets/WebServer.cpp web_sockets/WebServer.h web_sockets/client_events.h
-        my_web_server_worker.cpp my_web_server_worker.h)
+        my_web_server_worker.cpp my_web_server_worker.h
+        my_cam_adapter/cam_adapter.h my_cam_adapter/cam_adapter.cpp)
 
 target_link_libraries(cam_project_2 seasocks "${ZLIB_LIBRARIES}")
 target_link_libraries(cam_project_2 pthread z)
+target_link_libraries(cam_project_2 gphoto2)
+target_link_libraries(cam_project_2 gphoto2_port)
 
 add_custom_command(TARGET cam_project_2 POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
