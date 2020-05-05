@@ -13,6 +13,7 @@
 
 #include "web_sockets/WebServer.h"
 #include "lib_gphoto2_bash_adapter/gphoto2_bash.h"
+#include "my_cam_adapter/cam_adapter.h"
 
 /*this is a class MyWebServerWorker which extends a HandelrWS from a project for RaspberryPi and devices (MPU, ....)*/
 class MyWebServerWorker: public HandlerWS {
@@ -30,6 +31,7 @@ private:
     std::shared_ptr<MyServer> ws_server;            //object of WebServer
     std::shared_ptr<MyHandler> handler;             //and handler for events on WebServer
     std::shared_ptr<Gphoto2_adapter> adapter;       //bash adapter for working with CLI gphoto2
+    std::shared_ptr<CamAdapter> camAdapter;         //this object is for working with camera through libgphoto2
     int countActiveConnections = 0;                 //just for counting active connections, now has NOT a big sense and influence on system
     int eventAction = -1;                           //a code of current event
 

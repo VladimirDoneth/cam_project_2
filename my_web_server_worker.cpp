@@ -15,6 +15,8 @@ MyWebServerWorker::MyWebServerWorker() {
     DelegateWS* delegateWs = DelegateWS::getInstance();
     delegateWs->addHandler(this);
     adapter = std::make_shared<Gphoto2_adapter>();
+    camAdapter = std::make_shared<CamAdapter>();
+    camAdapter->initCamera();//not good solution, try to modify a CamAdapter
 }
 
 void MyWebServerWorker::startServer() {
@@ -72,8 +74,9 @@ void MyWebServerWorker::handleEventInOtherThread() {
 void MyWebServerWorker::imageTransfer() {
     handler->sendValue("HERE SHOULD BE A PHOTO");
     adapter->remove_photo_file();
-    adapter->trigger_capture();
-    adapter->get_photo_file();
+    //adapter->trigger_capture();
+    //adapter->get_photo_file();
+    camAdapter->getCapture("VirtualObjec.jpg");
     try {
         std::string data = getEncodedFileString("VirtualObjec.jpg");
         std::cout << data << std::endl;
