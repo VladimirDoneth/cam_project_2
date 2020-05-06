@@ -33,6 +33,12 @@ void MyHandler::onData(WebSocket* connection, const char* data) {
         _delegate->doEvent(std::make_shared<EventWS>(GET_LIST_FILES));
     } else if (strcmp(data, STR_GET_NOW_PHOTO) == 0) {
         _delegate->doEvent(std::make_shared<EventWS>(GET_NOW_PHOTO));
+    } else if (strcmp(data, STR_GET_PREVIEW) == 0) {
+        _delegate->doEvent(std::make_shared<EventWS>(GET_PREVIEW));
+    } else if (strcmp(data, STR_DO_ZOOM_PLUS) == 0) {
+        _delegate->doEvent(std::make_shared<EventWS>(DO_ZOOM_PLUS));
+    } else if (strcmp(data, STR_DO_ZOOM_MINUS) == 0) {
+        _delegate->doEvent(std::make_shared<EventWS>(DO_ZOOM_MINUS));
     }
 }
 
@@ -45,7 +51,7 @@ void MyHandler::onDisconnect(WebSocket* connection) {
 }
 
 void MyHandler::sendValue(const std::string values) {
-    std::cout << values << std::endl;
+    //std::cout << values << std::endl;
     for (auto c : _connections) {
         c->send(values);
     }

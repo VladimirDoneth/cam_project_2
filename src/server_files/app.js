@@ -36,6 +36,22 @@ $(function begin() {
         isShouldBeAnImage = true;
     })
 
+    $('#id_form_get_preview').click(function onClick(e) {
+        ws.send("GET_PREVIEW")
+        textArea.text("");
+        isShouldBeAnImage = true;
+    })
+
+    $('#id_form_zoom_plus').click(function onClick(e) {
+        ws.send("DO_ZOOM_PLUS");
+        textArea.text("CLICKED ON \"ZOOM +\"");
+    })
+
+    $('#id_form_zoom_minus').click(function onClick(e) {
+        ws.send("DO_ZOOM_MINUS");
+        textArea.text("CLICKED ON \"ZOOM -\"");
+    })
+
     isShouldBeAnImage = false;
     isHasOldChild = false;
     textArea = $('#message-area');

@@ -62,7 +62,14 @@ void MyWebServerWorker::handleEventInOtherThread() {
                 handler->sendVectorValues(adapter->get_list_files());
                 break;
             case GET_NOW_PHOTO:
-                imageTransfer();
+                imageTransfer(0);
+                break;
+            case GET_PREVIEW:
+                imageTransfer(1);
+                break;
+            case DO_ZOOM_PLUS:
+                break;
+            case DO_ZOOM_MINUS:
                 break;
             default:
                 std::cout << "here we have a troubles with lock";
@@ -71,18 +78,34 @@ void MyWebServerWorker::handleEventInOtherThread() {
     }
 }
 
-void MyWebServerWorker::imageTransfer() {
-    handler->sendValue("HERE SHOULD BE A PHOTO");
-    adapter->remove_photo_file();
-    //adapter->trigger_capture();
-    //adapter->get_photo_file();
-    camAdapter->getCapture("VirtualObjec.jpg");
-    try {
-        std::string data = getEncodedFileString("VirtualObjec.jpg");
-        std::cout << data << std::endl;
-        handler->sendValue(data);
-    } catch (std::exception e) {
-        handler->sendValue("ERROR WITH IMAGE FILE");
+void MyWebServerWorker::imageTransfer(int param) {
+    switch (param) {
+        case 0:
+            handler->sendValue("HERE SHOULD BE A PHOTO");
+            adapter->remove_photo_file();
+            //adapter->trigger_capture();
+            //adapter->get_photo_file();
+            camAdapter->getCapture("VirtualObjec.jpg");
+            try {
+                std::string data = getEncodedFileString("VirtualObjec.jpg");
+                //std::cout << data << std::endl;
+                handler->sendValue(data);
+            } catch (std::exception e) {
+                handler->sendValue("ERROR WITH IMAGE FILE");
+            }
+            break;
+        case 1:
+            char *data;
+            unsigned long size;
+            int res = camAdapter->getPreview(&data, &size);
+            if (res < 0) {
+                handler->sendValue("\nCANNOT TO GET A VALUE");
+            } else {
+                std::string str_value = base64EncodeSA(data, size);
+                handler->sendValue("HERE SHOULD BE A PHOTO");
+                handler->sendValue(str_value);
+            }
+            break;
     }
 }
 
@@ -96,6 +119,30 @@ void MyWebServerWorker::processHandler() {
     }
 }
 
+std::string base64EncodeSA(const char *buf, unsigned long bufLen) {
+    size_t ret_size = bufLen+2;
+
+    ret_size = 4*ret_size/3;
+
+    std::string ret;
+    ret.reserve(ret_size);
+
+    unsigned char b3[3];
+    for (unsigned int i=0; i<ret_size/4; ++i)
+    {
+        size_t index = i*3;
+        b3[0] = buf[index+0];
+        b3[1] = buf[index+1];
+        b3[2] = buf[index+2];
+
+        ret.push_back(toBase64Array[ ((b3[0] & 0xfc) >> 2) ]);
+        ret.push_back(toBase64Array[ ((b3[0] & 0x03) << 4) + ((b3[1] & 0xf0) >> 4) ]);
+        ret.push_back(toBase64Array[ ((b3[1] & 0x0f) << 2) + ((b3[2] & 0xc0) >> 6) ]);
+        ret.push_back(toBase64Array[ ((b3[2] & 0x3f)) ]);
+    }
+
+    return ret;
+}
 
 std::string base64Encode(std::vector<char> buf, unsigned int bufLen) {
     size_t ret_size = bufLen+2;

@@ -41,7 +41,9 @@ private:
 
     void startServer();                             //function where started the thread of WebServer
     void handleEventInOtherThread();                //it used for handing events which need a lot of computer time (hard to compute)
-    void imageTransfer();                           //it used for moving an image from a camera to Raspberry Pi an them to
+    void imageTransfer(int param);                  //it used for moving an image from a camera to Raspberry Pi an them to client
+                                                    //if param == 0 here use a default capture method on a camera
+                                                    //if param == 1 this function get from camera a default preview image
 };
 
 /*may be I should to create a new class for this?
@@ -52,6 +54,7 @@ private:
  *      and return an encoded string*/
 static const char toBase64Array[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 std::string base64Encode(std::vector<char> buf, unsigned int bufLen);
+std::string base64EncodeSA(const char *buf, unsigned long bufLen);
 std::string getEncodedFileString(const std::string filename);
 
 #endif //WS_DEVICES_2_MY_WEB_SERVER_WORKER_H
