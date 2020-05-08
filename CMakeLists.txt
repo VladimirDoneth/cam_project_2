@@ -11,7 +11,8 @@ add_executable(cam_project_2
         web_sockets/lib_my_event_handler/handler_ws.h
         web_sockets/WebServer.cpp web_sockets/WebServer.h web_sockets/client_events.h
         my_web_server_worker.cpp my_web_server_worker.h
-        my_cam_adapter/cam_adapter.h my_cam_adapter/cam_adapter.cpp)
+        #my_cam_adapter/cam_adapter.h my_cam_adapter/cam_adapter.cpp
+        my_cam_adapter_2/cam_adapter.cpp my_cam_adapter_2/cam_adapter.h my_cam_adapter_2/cam_functions.h my_cam_adapter_2/context.cpp)
 
 target_link_libraries(cam_project_2 seasocks "${ZLIB_LIBRARIES}")
 target_link_libraries(cam_project_2 pthread z)
